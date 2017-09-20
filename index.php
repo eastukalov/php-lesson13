@@ -1,7 +1,10 @@
 <?php
 session_start();
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=global;charset=utf8", "root");
+
+
+    $pdo = new PDO("mysql:host=localhost;dbname=global;charset=utf8", "estukalov", "neto1205");
+ //   $pdo = new PDO("mysql:host=localhost;dbname=global;charset=utf8", "root");
 }
 catch (PDOException $e) {
 //    die('Подключение не удалось: ' . $e->getMessage());
@@ -91,7 +94,7 @@ while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 
     <div style="float: left">
         <form method='POST'>
-            <input type="text" name="var" placeholder='Описание задачи' value="<?=isset($description)? $description[0]:''?>">
+            <input type="text" name="var" placeholder='Описание задачи' value="<?=!empty($description)? $description[0]:''?>">
             <input type='submit' value=<?=isset($_SESSION['id']) ? 'Сохранить' : 'Добавить'?>>
         </form>
     </div>
@@ -119,7 +122,7 @@ while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             </tr>
         </thead>
         <tbody>
-            <?php if (null!==$results) { foreach ($results as $value) :?>
+            <?php if (!empty($results)) { foreach ($results as $value) :?>
             <tr>
                 <td><?=$value['description']?></td>
                 <td><?=$value['date_added']?></td>
