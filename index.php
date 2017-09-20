@@ -10,6 +10,7 @@ catch (PDOException $e) {
 $array = [];
 $description = [];
 $order = ';';
+$sort_array = ['date_added', 'is_done', 'description'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
 
@@ -28,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
         $statement->execute($array);
     }
 
-    if (isset($_POST['my_sort']) && !empty($_POST['my_sort'])) {
-        $order = ' ORDER BY ' . htmlspecialchars($_POST['my_sort']) . ';';
+    if (isset($_POST['my_sort']) && !empty($_POST['my_sort']) && in_array($_POST['my_sort'], $sort_array)) {
+        $order = ' ORDER BY ' . ($_POST['my_sort']) . ';';
     }
 
 }
