@@ -16,21 +16,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
     if (isset($_POST['var']) & !empty($_POST['var'])) {
         if (isset($_SESSION['id'])) {
             $sql = "UPDATE tasks SET description = :description WHERE id=:id;";
-            $array = ['description'=>$_POST['var'], 'id'=>$_SESSION['id']];
+            $array = ['description'=>htmlspecialchars($_POST['var']), 'id'=>$_SESSION['id']];
         }
         else {
             $sql = "INSERT INTO tasks (description, is_done, date_added) VALUES (:description, :is_done, :date_added)";
-            $array = ['description'=>$_POST['var'], 'is_done'=>0, 'date_added'=>date('Y.m.d Hi:s:',time())];
+            $array = ['description'=>htmlspecialchars($_POST['var']), 'is_done'=>0, 'date_added'=>date('Y.m.d Hi:s:',time())];
         }
 
         unset($_SESSION['id']);
-        unset($_SESSION['description']);
         $statement = $pdo->prepare($sql);
         $statement->execute($array);
     }
 
     if (isset($_POST['my_sort']) && !empty($_POST['my_sort'])) {
-        $order = ' ORDER BY ' . $_POST['my_sort'] . ';';
+        $order = ' ORDER BY ' . htmlspecialchars($_POST['my_sort']) . ';';
     }
 
 }
@@ -91,7 +90,7 @@ while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 
     <div style="float: left">
         <form method='POST'>
-            <input type="text" name="var" placeholder='Описание задачи' value=<?=isset($description)?$description[0]:''?>>
+            <input type="text" name="var" placeholder='Описание задачи' value="<?=isset($description)? $description[0]:''?>">
             <input type='submit' value=<?=isset($_SESSION['id']) ? 'Сохранить' : 'Добавить'?>>
         </form>
     </div>
