@@ -5,11 +5,13 @@ try {
 }
 catch (PDOException $e) {
 //    die('Подключение не удалось: ' . $e->getMessage());
-    die('Подключение не удалось: ');
+//    die('Подключение не удалось: ');
+    $pdo = new PDO("mysql:host=localhost;dbname=global;charset=utf8", "estukalov", "neto1205");
 }
 $array = [];
 $description = [];
 $order = ';';
+$sort_array = ['date_added', 'is_done', 'description'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
 
@@ -28,8 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
         $statement->execute($array);
     }
 
-    if (isset($_POST['my_sort']) && !empty($_POST['my_sort'])) {
-        $order = ' ORDER BY ' . htmlspecialchars($_POST['my_sort']) . ';';
+    if (isset($_POST['my_sort']) && !empty($_POST['my_sort']) && in_array($_POST['my_sort'], $sort_array)) {
+        $order = ' ORDER BY ' . ($_POST['my_sort']) . ';';
     }
 
 }
@@ -90,7 +92,7 @@ while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
 
     <div style="float: left">
         <form method='POST'>
-            <input type="text" name="var" placeholder='Описание задачи' value="<?=isset($description)? $description[0]:''?>">
+            <input type="text" name="var" placeholder='Описание задачи' value="<?=!empty($description)? $description[0]:''?>">
             <input type='submit' value=<?=isset($_SESSION['id']) ? 'Сохранить' : 'Добавить'?>>
         </form>
     </div>
@@ -118,7 +120,7 @@ while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
             </tr>
         </thead>
         <tbody>
-            <?php if (null!==$results) { foreach ($results as $value) :?>
+            <?php if (!empty($results)) { foreach ($results as $value) :?>
             <tr>
                 <td><?=$value['description']?></td>
                 <td><?=$value['date_added']?></td>
