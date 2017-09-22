@@ -77,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET)) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' & !empty($_POST) & isset($_POST['addedit']))  {
     header("Location: index.php");
+    exit;
 }
 
 $sql = "SELECT * FROM tasks" . $order;
