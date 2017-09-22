@@ -1,5 +1,8 @@
 <?php
+<<<<<<< HEAD
 session_start();
+=======
+>>>>>>> f9b6b8c6b71d6f00363e1b5013a1fb95bd3f492a
 $database = 'global';
 
 try {
