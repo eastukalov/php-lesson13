@@ -1,5 +1,4 @@
 <?php
-session_start();
 $database = 'global';
 
 try {
@@ -37,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
     }
 
     if (isset($_POST['my_sort']) && !empty($_POST['my_sort']) && in_array($_POST['my_sort'], $sort_array)) {
-        $_SESSION['order'] = ' ORDER BY ' . ($_POST['my_sort']) . ';';
+        $order = ' ORDER BY ' . ($_POST['my_sort']) . ';';
     }
 
 }
@@ -76,13 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && !empty($_GET)) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST)) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' & !empty($_POST) & isset($_POST['addedit']))  {
     header("Location: index.php");
-    exit;
-}
-
-if (isset($_SESSION['order']) && !empty($_SESSION['order'])) {
-    $order = $_SESSION['order'];
 }
 
 $sql = "SELECT * FROM tasks" . $order;
@@ -92,8 +86,6 @@ $statement->execute($array);
 while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
     $results[] = $row;
 }
-
-unset($_SESSION['order']);
 
 ?>
 <html lang='ru'>
@@ -114,7 +106,7 @@ unset($_SESSION['order']);
         <form method='POST'>
             <input type="hidden" name="add_edit" value="<?=$add_edit?>">
             <input type="text" name="var" placeholder='Описание задачи' value="<?=!empty($description)? $description[0]:''?>">
-            <input type='submit' value=<?=$add_edit=='edit' ? 'Сохранить' : 'Добавить'?>>
+            <input type='submit' value=<?=$add_edit=='edit' ? 'Сохранить' : 'Добавить'?> name='addedit'>
         </form>
     </div>
 
